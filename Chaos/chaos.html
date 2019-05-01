@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: #EEE;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			border: 1px solid #00FF00;
+			margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="900" height="800"></canvas>
+	<script src="../jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+
+			//var random = Math.random() * (+max - +min) + +min;
+			var canvas = document.querySelector("canvas");
+			
+			var height = window.innerHeight;
+			var width = window.innerWidth;
+			canvas.width = height-40;
+			canvas.height = height-40;
+			thisH = height-40;
+			var ctx = canvas.getContext("2d");
+			ctx.fillStyle = 'rgba(0,0,255,0.5)';
+			var FC = 2.5;
+			var pop = 0.5;
+			function drawPoint (fc,x,y){
+				ctx.fillStyle = 'rgba(125,'+(fc/5)*140+','+(1-(fc/5))*255+',1)';
+				ctx.beginPath();
+				ctx.arc(x, y , 1, 0, 2 * Math.PI);
+				ctx.fill();
+			}
+			function upDateFC(){
+				setTimeout(function(){
+					pop = 0.5;
+					if (FC<2) {
+						pop = 0.8;
+						FC = FC + 0.02;
+					}else if (FC<3.4 && FC>=2) {
+						pop = 0.5;
+						FC = FC + 0.01;
+					}else {
+						pop = 0.5;
+						FC = FC+0.001;
+					}
+					for (var i = 0; i < 200; i++) {
+						console.log(FC);
+						if (pop>=1 || pop <=0.001) {
+							break;
+						}else {
+							pop = FC*pop*(1-pop);
+							drawPoint(FC,(FC-2.5)*(thisH/1.5),thisH-((pop*thisH)));
+						}
+					}
+					upDateFC();
+				}, 1);
+			};
+			upDateFC();			
+		});
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
