@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: transparent;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+			
+			background-image: url('./triangle.png');
+			/*background: linear-gradient((to right, #dc5332, #c621fa), url('./triangle.png') repeat center 10px 10px);*/
+			/*background: 
+				linear-gradient(to right, #dc3532 0%, purple 90%), 
+				url('triangle.png') 8px 8px ;
+			background-blend-mode: multiply;*/
+			background-repeat: repeat;
+			background-size: 10px 10px;
+			background-position: center;
+			
+			
+			position: relative;
+			width: 100vw;
+			height: 100vh;
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			margin: auto;z-index: 100;
+		}
+		div{
+			position: absolute;
+			width: 200vw;
+			height: 200vh;
+			left: 50%;
+			top: 50%;
+			background-image: url('./triangle.png');
+			background-repeat: repeat;
+			background-size: 10px 10px;
+			background-position: center;
+
+			
+			transform-origin: center;
+			transform: translate(-50%,-50%) rotate(0deg);
+			animation:mobBgAni 200s;
+			-moz-animation:mobBgAni 200s infinite;
+			-webkit-animation:mobBgAni 200s infinite;
+			transition: all;
+			transition-timing-function: ease-out;
+}
+
+
+@-moz-keyframes mobBgAni{
+	0%   {transform: translate(-50%,-50%) rotate(0deg);}
+	25%  {transform: translate(-50%,-50%) rotate(180deg);}
+	50%   {transform: translate(-50%,-50%) rotate(360deg);}
+	75%  {transform: translate(-50%,-50%) rotate(180deg);}
+	100%   {transform: translate(-50%,-50%) rotate(0deg);}
+}
+
+@-webkit-keyframes mobBgAni{
+	0%   {transform: translate(-50%,-50%) rotate(0deg);}
+	25%  {transform: translate(-50%,-50%) rotate(180deg);}
+	50%   {transform: translate(-50%,-50%) rotate(360deg);}
+	75%  {transform: translate(-50%,-50%) rotate(180deg);}
+	100%   {transform: translate(-50%,-50%) rotate(0deg);}
+}
+		}
+	</style>
+</head>
+<body>
+	<div></div>
+	
+</body>
+</html>

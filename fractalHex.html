@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: #EEE;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+			background: radial-gradient(#000,#333);
+			/*background-color: #000;*/
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			/*background: radial-gradient(#444,#333);*/
+			/*background-color: #444;*/
+			margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="900" height="800"></canvas>
+	<script src="./jquery.min.js"></script>
+	<script>
+		$(function() {
+			var min=1; 
+		    var max=6.99999;
+		    var count1=0;
+		    var count2=0;
+		    var count3=0;
+		    var count4=0;
+		    var count5=0;
+		    var count6=0;
+		    var width = window.innerWidth;
+		    var height = window.innerHeight;
+		    len = 960;
+		    
+
+		    var c1={};var c2={};var c3={};var c4={};var c5={};var c6={};var altc1={};var altc2={};var altc3={};var altc4={};var altc5={};var altc6={};
+
+		    c1.x = (height/4);
+		    c1.y = 0;
+
+		    c2.x = (height*3)/4;
+		    c2.y = 0;
+		    
+		    c3.x = 0;
+		    c3.y = height/2;
+
+		    c4.x = height;
+		    c4.y = height/2;
+
+		    c5.x = (height/4);
+		    c5.y = height;
+
+		    c6.x = (height*3)/4;
+		    c6.y = height;
+
+		    altc1.x = height/2;
+		    altc1.y = 0;
+
+		    altc2.x = 0;
+		    altc2.y = height/4;
+		    
+		    altc3.x = height;
+		    altc3.y = height/4;
+
+		    altc4.x = 0;
+		    altc4.y = 3*height/4;
+
+		    altc5.x = height;
+		    altc5.y = 3*height/4;
+
+		    altc6.x = height/2;
+		    altc6.y = height;
+
+		    var points =[c1,c2,c3,c4,c5,c6,altc1,altc2,altc3,altc4,altc5,altc6];
+		    
+
+		   var color = ['#FFFF00','#00FF00','#FF00FF','#00FFFF','#0000FF','#FF0000'];
+		   var colorBack = '#333333';
+		   var colorBackAlt ='#999999';
+		    var random = Math.random() * (+max - +min) + +min;
+			var canvas = document.querySelector("canvas");
+			
+			canvas.width = height;
+			canvas.height = height;
+			var ctx = canvas.getContext("2d");
+			for (var i = 0; i < points.length; i++) {
+				ctx.fillStyle = color[i];
+				ctx.beginPath();
+				ctx.arc(points[i].x, points[i].y, 5, 0, 2 * Math.PI);
+				ctx.fill();
+				
+			}
+			var beginX = 240;
+			var beginY = 180;
+			
+			var beginXAlt = 400;
+			var beginYAlt = 800;
+
+			ctx.fillStyle = '#aaaaaa';
+
+			ctx.beginPath();
+			ctx.arc(beginX, beginY, 3, 0, 2 * Math.PI);
+			ctx.fill();
+			
+
+			ctx.fillStyle = '#555666';
+			for (var i = 0; i < 200000; i++) {
+				random = parseInt(Math.random() * (+max - +min) + +min);
+				if (random == 1){
+					setTimeout(function(){
+						count1++;
+						drawMid(1);
+					}, 2000);
+				}
+				else if(random == 2){
+					setTimeout(function(){
+						count2++;
+						drawMid(2);
+					}, 2000);
+				}
+				else if(random == 3){
+					setTimeout(function(){
+						count3++;
+						drawMid(3);
+					}, 2000);
+				}else if(random == 4){
+					setTimeout(function(){
+						count4++;
+						drawMid(4);
+					}, 2000);
+				}else if(random == 5){
+					setTimeout(function(){
+						count5++;
+						drawMid(5);
+					}, 2000);
+				}else if(random == 6){
+					setTimeout(function(){
+						count6++;
+						drawMid(6);
+					}, 2000);
+				}
+				
+			}
+			console.log('count1:'+count1,'count2:'+count2,'count3:'+count3,'count4:'+count4,'count5:'+count5,'count6:'+count6);
+			function drawMid(circIndex){				
+				ctx.beginPath();
+				ctx.fillStyle = colorBack;
+				ctx.strokeStyle = color[circIndex-1];
+				var xDiff = points[circIndex-1].x-beginX;
+				var yDiff = points[circIndex-1].y-beginY;
+				beginX = beginX+((xDiff*2)/3);
+				beginY = beginY+((yDiff*2)/3);
+				ctx.arc(beginX,beginY, 1, 0, 2 * Math.PI);
+				ctx.stroke();
+				ctx.fill();
+				colorBack = color[circIndex-1];
+
+
+				// ctx.beginPath();
+				// ctx.fillStyle = colorBackAlt;
+				// ctx.strokeStyle = color[6-circIndex];
+				// var xDiff = points[12-circIndex].x-beginXAlt;
+				// var yDiff = points[12-circIndex].y-beginYAlt;
+				// beginXAlt = beginXAlt+((xDiff*2)/3);
+				// beginYAlt = beginYAlt+((yDiff*2)/3);
+				// ctx.arc(beginXAlt,beginYAlt, 1, 0, 2 * Math.PI);
+				// ctx.stroke();
+				// ctx.fill();
+				// colorBackAlt = color[6-circIndex];
+			}
+		});
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

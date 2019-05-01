@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: #EEE;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			/*background: radial-gradient(#444,#333);*/
+			/*background-color: #444;*/
+			margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="900" height="800"></canvas>
+	<script src="./jquery.min.js"></script>
+	<script>
+		$(function() {
+			var min=1; 
+		    var max=4.99999;
+		    var count1=0;
+		    var count2=0;
+		    var count3=0;
+		    var count4=0;
+		    var count5=0;
+		    var count6=0;
+		    var width = window.innerWidth;
+		    var height = window.innerHeight;
+
+		    var c1x = parseInt(40);
+		    var c1y = parseInt(40);
+
+		    var c2x = parseInt(width-40);
+		    var c2y = parseInt(40);
+		    
+		    var c3x = parseInt(width-40);
+		    var c3y = parseInt(height-40);
+
+		    var c4x = parseInt(40);
+		    var c4y = parseInt(height-40);
+
+		    var color = '#333333';
+
+		    var random = Math.random() * (+max - +min) + +min;
+			var canvas = document.querySelector("canvas");
+			
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			var ctx = canvas.getContext("2d");
+
+			ctx.fillStyle = '#FF0000';
+			ctx.beginPath();
+			ctx.arc(c1x, c1y, 5, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(c2x, c2y, 5, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(c3x, c3y, 5, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(c4x, c4y, 5, 0, 2 * Math.PI);
+			ctx.fill();
+			
+
+
+			var beginX = 240;
+			var beginY = 180;
+			
+			ctx.fillStyle = '#000000';
+
+			ctx.beginPath();
+			ctx.arc(beginX, beginY, 3, 0, 2 * Math.PI);
+			ctx.fill();
+			
+
+			ctx.fillStyle = '#555666';
+			for (var i = 0; i < 50000; i++) {
+				random = parseInt(Math.random() * (+max - +min) + +min);
+				if (random == 1){
+					setTimeout(function(){
+						count1++;
+						drawMid(1);
+					}, 2000);
+				}
+				else if(random == 2){
+					setTimeout(function(){
+						count2++;
+						drawMid(2);
+					}, 2000);
+				}
+				else if(random == 3){
+					setTimeout(function(){
+						count3++;
+						drawMid(3);
+					}, 2000);
+				}else if(random == 4){
+					setTimeout(function(){
+						count4++;
+						drawMid(4);
+					}, 2000);
+				}
+			}
+			
+			function drawMid(circIndex){
+				
+				
+				
+				
+				if (circIndex == 1) {
+					ctx.beginPath();
+					ctx.strokeStyle = color;
+					color = '#FFFF00';
+					var xDiff = c1x-beginX;
+					var yDiff = c1y-beginY;
+					beginX = beginX+(xDiff*0.6);
+					beginY = beginY+(yDiff*0.6);
+					ctx.arc(beginX,beginY, 1, 0, 2 * Math.PI);
+					ctx.stroke();
+					ctx.fill();
+
+				}else if (circIndex == 2) {
+
+					ctx.beginPath();
+					ctx.strokeStyle = color;
+					color = '#00FF00';
+					var xDiff = c2x-beginX;
+					var yDiff = c2y-beginY;
+					beginX = beginX+(xDiff*0.6);
+					beginY = beginY+(yDiff*0.6);
+					ctx.arc(beginX,beginY, 1, 0, 2 * Math.PI);
+					ctx.stroke();
+					ctx.fill();
+
+
+				}else if (circIndex == 3) {
+					ctx.beginPath();
+					ctx.strokeStyle = color;
+					color = '#FF00FF';
+					var xDiff = c3x-beginX;
+					var yDiff = c3y-beginY;
+					beginX = beginX+(xDiff*0.6);
+					beginY = beginY+(yDiff*0.6);
+					ctx.arc(beginX,beginY, 1, 0, 2 * Math.PI);
+
+					ctx.stroke();
+					ctx.fill();
+
+				}else if (circIndex == 4) {
+					ctx.beginPath();
+					ctx.strokeStyle = color;
+					color = '#00FFFF';
+					var xDiff = c4x-beginX;
+					var yDiff = c4y-beginY;
+					beginX = beginX+(xDiff*0.6);
+					beginY = beginY+(yDiff*0.6);
+					ctx.arc(beginX,beginY, 1, 0, 2 * Math.PI);
+
+					ctx.stroke();
+					ctx.fill();
+
+				}
+				
+			}
+		});
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

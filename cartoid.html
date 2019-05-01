@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: #EEE;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			
+			
+			margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="900" height="800"></canvas>
+	<script src="./jquery.min.js"></script>
+	<script>
+		$(function() {
+			
+		    var width = window.innerWidth;
+		    var height = window.innerHeight;
+		    
+			var canvas = document.querySelector("canvas");
+			
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			var ctx = canvas.getContext("2d");
+			ctx.fillStyle = '#FF0000';
+			ctx.beginPath();
+			ctx.arc(width/2, height/2, height/3, 0, 2 * Math.PI);
+			ctx.stroke();
+
+			var points = [];
+			for (var i = 0; i < 10; i++) {
+				var point ={};
+				point.x = (width/2)+(height/3);
+				point.y = (height/2)+(height/3);
+			}
+		});
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
