@@ -51,35 +51,43 @@
 			var FC = 2.5;
 			var pop = 0.5;
 			function drawPoint (fc,x,y){
-				ctx.fillStyle = 'rgba(125,'+(fc/5)*140+','+(1-(fc/5))*255+',1)';
+				ctx.fillStyle = 'rgba(125,'+(fc/5)*140+','+(1-(fc/5))*255+',0.1)';
 				ctx.beginPath();
 				ctx.arc(x, y , 1, 0, 2 * Math.PI);
 				ctx.fill();
 			}
 			function upDateFC(){
-				setTimeout(function(){
-					pop = 0.5;
-					if (FC<2) {
-						pop = 0.8;
-						FC = FC + 0.02;
-					}else if (FC<3.4 && FC>=2) {
+				if (FC>4) {
+
+				}else{
+					setTimeout(function(){
 						pop = 0.5;
-						FC = FC + 0.01;
-					}else {
-						pop = 0.5;
-						FC = FC+0.001;
-					}
-					for (var i = 0; i < 200; i++) {
-						console.log(FC);
-						if (pop>=1 || pop <=0.001) {
-							break;
+						if (FC<2.2) {
+							var i = 400;
+							pop = 0.8;
+							FC = FC + 0.01;
+						}else if (FC<3.4 && FC>=2.2) {
+							var i = 400;
+							pop = 0.5;
+							FC = FC + 0.005;
 						}else {
-							pop = FC*pop*(1-pop);
-							drawPoint(FC,(FC-2.5)*(thisH/1.5),thisH-((pop*thisH)));
+							var i=0;
+							pop = 0.5;
+							FC = FC+0.001;
 						}
-					}
-					upDateFC();
-				}, 1);
+						for (i; i < 500; i++) {
+							console.log(FC);
+							if (pop>=1 || pop <=0.001) {
+								break;
+							}else {
+								pop = FC*pop*(1-pop);
+								drawPoint(FC,((FC-2.5)*(thisH/1.5)),thisH-((pop*thisH)));
+							}
+						}
+						upDateFC();
+					}, 1);
+				}
+				
 			};
 			upDateFC();			
 		});
