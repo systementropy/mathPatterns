@@ -48,6 +48,11 @@
 			display: inline-block;
 			text-align: left;
 		}
+		@media only screen and (max-width: 610px) {
+			body{
+				background: radial-gradient(#EEE,#FFF);
+			}
+		}
 	</style>
 </head>
 <body>
@@ -65,11 +70,20 @@
 			var points = [];
 			var height = window.innerHeight;
 			var width = window.innerWidth;
-			canvas.width = height-40;
-			canvas.height = height-40;
-			canvas2.width = height-40;
-			canvas2.height = height-40;
-			thisH = height-40;
+			if (height<=width) {
+				canvas.width = height-40;
+				canvas.height = height-40;
+				canvas2.width = height-40;
+				canvas2.height = height-40;
+				thisH = height-40;
+			}else{
+				canvas.width = width-40;
+				canvas.height = width-40;
+				canvas2.width = width-40;
+				canvas2.height = width-40;
+				thisH = width-40;
+			}
+			
 			var ctx = canvas.getContext("2d");
 			ctx.strokeStyle = 'rgba(0,0,255,0.5)';
 			var xGridLen;
