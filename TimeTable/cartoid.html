@@ -17,7 +17,7 @@
 		body{
 			font-weight: 300;
 			text-align: center;
-			background-color: #EEE;
+			background: radial-gradient(#000,#333);
 			display: flex;
 			width: 100vw;
 			height: 100vh;
@@ -27,37 +27,163 @@
 			cursor: pointer;
 		}
 		canvas{
-			
-			
 			margin: auto;
+		}
+		canvas#canvas2 {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%,-50%);
+		}
+		.info {
+			position: absolute;
+			font-size: 40px;
+			padding: 40px;
+			color: #FFF;
+			background: radial-gradient(#333,#000);
+		}
+		b{
+			font-weight: 700;
 		}
 	</style>
 </head>
 <body>
 	<canvas id="canvas" width="900" height="800"></canvas>
+	<canvas id="canvas2" width="900" height="800"></canvas>
+	<div class="info">
+		<div><b class="timetable"></b> - Times Table</div>
+		<div>Modulus :<b class="mod"></b></div>
+	</div>
 	<script src="../jquery.min.js"></script>
 	<script>
-		$(function() {
-			
-		    var width = window.innerWidth;
-		    var height = window.innerHeight;
-		    
-			var canvas = document.querySelector("canvas");
-			
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-			var ctx = canvas.getContext("2d");
-			ctx.fillStyle = '#FF0000';
-			ctx.beginPath();
-			ctx.arc(width/2, height/2, (3*height)/7, 0, 2 * Math.PI);
-			ctx.stroke();
+		$(document).ready(function() {
 
+			//var random = Math.random() * (+max - +min) + +min;
+			var canvas = document.getElementById("canvas");
+			var canvas2 = document.getElementById("canvas2");
+			console.log(canvas2);
 			var points = [];
-			for (var i = 0; i < 10; i++) {
-				var point ={};
-				point.x = (width/2)+(height/3);
-				point.y = (height/2)+(height/3);
+			var height = window.innerHeight;
+			var width = window.innerWidth;
+			canvas.width = height-40;
+			canvas.height = height-40;
+			canvas2.width = height-40;
+			canvas2.height = height-40;
+			thisH = height-40;
+			var ctx = canvas.getContext("2d");
+			ctx.strokeStyle = 'rgba(0,0,255,0.5)';
+			var xGridLen;
+			var yGridLen;
+			$('.clicker').on('click', function(event) {
+				event.preventDefault();
+				
+				drawPoint(parseInt($('#inputX').val()),parseInt($('#inputY').val()));
+			});
+				
+			var ctx2 = canvas2.getContext("2d");
+			function pt2pt(pt1,pt2){
+				
+				ctx2.beginPath();
+				ctx2.strokeStyle = 'rgba('+(pt1*pt2)+','+pt1+','+pt2+', 0.7)';
+				ctx2.setLineDash([]);	
+				ctx2.moveTo(points[pt1].x,points[pt1].y);
+				ctx2.lineTo(points[pt2].x,points[pt2].y);
+				ctx2.stroke();
 			}
+			function drawStraightLine(val,dir,label){
+				var linOp = Math.abs(((thisH/2)-val)/(thisH/6));
+				ctx.beginPath();
+				if (linOp == 0) {
+					ctx.setLineDash([]);
+					ctx.strokeStyle = 'rgba(238,138,38,1';
+				}else {
+					ctx.setLineDash([2,2]);
+					ctx.strokeStyle = 'rgba(38,38,38,'+1/(4*linOp)+')';	
+				}
+				
+				if (dir == true) {
+					ctx.moveTo(0, val);
+					ctx.lineTo(thisH, val);
+					ctx.stroke();
+				}else {
+					ctx.moveTo(val,0);
+					ctx.lineTo(val,thisH);
+					ctx.stroke();
+				}
+			}
+			function drawPoint(gridx,gridy){
+				ctx.fillStyle = 'rgba(255,38,38,1)';
+				ctx.beginPath();
+				var x = (thisH/2)+(gridx*xGridLen);
+				var y = (thisH/2)-(gridy*yGridLen);
+				ctx.arc(x, y , 5, 0, 2 * Math.PI);
+				ctx.fill();
+			}
+			var theta = 0;
+			var r = 0;
+			var pointNumber = 0;
+			function createTimeTablePoints(num){
+				pointNumber = num;
+				ctx.fillStyle = 'rgba(38,38,138,1)';
+				for (var i = 0; i < num; i++) {
+					var thisPT = {};
+					ctx.beginPath();
+					thisPT.x = (thisH/2) + (r * (Math.cos(theta)));
+					thisPT.y = (thisH/2) - (r * (Math.sin(theta)));
+					ctx.arc(thisPT.x, thisPT.y , 2 , 0, 2 * Math.PI);
+					ctx.font = "10px Arial";
+					//ctx.fillText(i, (thisPT.x)+(20 * (Math.cos(theta))), (thisPT.y)-(15 * (Math.sin(theta))));
+					ctx.fill();
+					theta = theta + ((2 * Math.PI)/num);
+					points.push(thisPT);
+				}
+			};
+			function drawUnityCircle(){
+				ctx.beginPath();
+				ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+				var x = r * (Math.cos(theta));
+				var y = r * (Math.sin(theta));
+				ctx.arc(thisH/2, thisH/2 , r, 0, 2 * Math.PI);
+				ctx.stroke();
+			}
+			function createTimeTable(num){
+				if (num>=201) {
+
+				}else{
+					$('.timetable').text((Math.round(num*10))/10);
+					$('.mod').text(pointNumber);
+					setTimeout(function(){
+						ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+						for (var i = 0; i < pointNumber; i++) {
+							pt2pt(i,(Math.round(i*num))%pointNumber);
+						}
+						createTimeTable(num+0.1);
+					}, 400);
+				}
+				
+			}
+			function createGrid(x,y){
+				var midPt = {};
+				midPt.x =thisH/2;
+				midPt.y =thisH/2;
+				xGridLen = (thisH/(2*x));
+				yGridLen = (thisH/(2*y));
+				r = xGridLen;
+				drawPoint(0,0);
+				drawStraightLine(midPt.x,true,0);				//horizontal X-axis
+				drawStraightLine(midPt.y,false,0);			//vertical Y-axis
+				drawUnityCircle();
+				for (var i = 1; i < x; i++) {
+					drawStraightLine(midPt.x+((thisH*i)/(2*x)),true,i);
+					drawStraightLine(midPt.x-((thisH*i)/(2*x)),true,i);
+					drawStraightLine(midPt.y+((thisH*i)/(2*y)),false,i);
+					drawStraightLine(midPt.y-((thisH*i)/(2*y)),false,i);
+				}
+				createTimeTablePoints(200);
+				createTimeTable(0);
+			}
+			createGrid(1.2,1.2);
+
 		});
 	</script>
 </body>
