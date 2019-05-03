@@ -54,14 +54,11 @@
 	<canvas id="canvas" width="900" height="800"></canvas>
 	<canvas id="canvas2" width="900" height="800"></canvas>
 	<div class="info">
-		<div>Times Table for <b class="timetable"></b></div>
-		<div>Modulus :  <b class="mod"></b></div>
+		<div>Times Table for <b id="timetable"></b></div>
+		<div>Modulus :  <b id="mod"></b></div>
 	</div>
-	<script src="../jquery.min.js"></script>
 	<script>
-		$(document).ready(function() {
-
-			//var random = Math.random() * (+max - +min) + +min;
+		
 			var canvas = document.getElementById("canvas");
 			var canvas2 = document.getElementById("canvas2");
 			console.log(canvas2);
@@ -77,11 +74,6 @@
 			ctx.strokeStyle = 'rgba(0,0,255,0.5)';
 			var xGridLen;
 			var yGridLen;
-			$('.clicker').on('click', function(event) {
-				event.preventDefault();
-				
-				drawPoint(parseInt($('#inputX').val()),parseInt($('#inputY').val()));
-			});
 				
 			var ctx2 = canvas2.getContext("2d");
 			function pt2pt(pt1,pt2){
@@ -127,7 +119,8 @@
 			var pointNumber = 0;
 			function createTimeTablePoints(num){
 				pointNumber = num;
-				$('.mod').text(pointNumber);
+				var elem = document.getElementById("mod");
+				elem.innerHTML= pointNumber;
 				ctx.fillStyle = 'rgba(38,38,138,1)';
 				for (var i = 0; i < num; i++) {
 					var thisPT = {};
@@ -154,7 +147,8 @@
 				if (num>=101) {
 
 				}else{
-					$('.timetable').text((Math.round(num*10))/10);
+					var elem = document.getElementById("timetable");
+					elem.innerHTML= (Math.round(num*10))/10;
 					
 					setTimeout(function(){
 						ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -188,7 +182,6 @@
 			}
 			createGrid(1.2,1.2);
 
-		});
 	</script>
 </body>
 </html>
