@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: #EEE;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			border: 1px solid #00FF00;
+			margin: auto;
+		}
+		.form {
+			position: absolute;
+			z-index: 1000;
+			background: #FFF;
+			display: flex;
+			flex-direction: column;
+			padding: 25px;
+		}
+		.form input,.form textarea{
+			background-color: #F5F5F6;
+			border: none;
+			border-bottom: 1px solid rgba(0,0,0,0);
+			box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.3);
+			outline: none;
+			padding: 10px 15px;
+			color: rgba(38,38,38,0.8);
+			text-align: left;
+			font-size: 14px;
+			line-height: 14px;
+			margin: 10px 0;
+			transition: all 0.4s ease-out;
+			border-radius: 2px;
+			width: 100%;
+		}
+		.form input:focus,.form textarea:focus,.form button:focus{
+			box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.3);
+			border-bottom: 1px solid rgba(0,0,0,0.1);
+		}
+		.form input::placeholder,.form textarea::placeholder{
+			color: rgba(38,38,38,0.5);
+		}
+		.form button{
+			width: auto;
+			margin: auto auto auto 0;
+			background: linear-gradient(to right, #333, #464646);
+			color: #FFF;
+			padding: 5px 15px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="900" height="800"></canvas>
+	<div class="form">
+		<input type="text" placeholder="input x coordinate" id="inputX">
+		<input type="text" placeholder="input y coordinate" id="inputY">
+		<button class="clicker">GO</button>
+	</div>
+	<script src="../jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+
+			//var random = Math.random() * (+max - +min) + +min;
+			var canvas = document.querySelector("canvas");
+			
+			var height = window.innerHeight;
+			var width = window.innerWidth;
+			canvas.width = height-40;
+			canvas.height = height-40;
+			thisH = height-40;
+			var ctx = canvas.getContext("2d");
+			ctx.strokeStyle = 'rgba(0,0,255,0.5)';
+			var xGridLen;
+			var yGridLen;
+			$('.clicker').on('click', function(event) {
+				event.preventDefault();
+				
+				drawPoint(parseInt($('#inputX').val()),parseInt($('#inputY').val()));
+			});
+				
+			
+			function drawDottedLine(val,dir){
+
+			}
+			function drawStraightLine(val,dir,label){
+				var linOp = Math.abs(((thisH/2)-val)/(thisH/6));
+				ctx.beginPath();
+				if (linOp == 0) {
+					ctx.setLineDash([]);
+					ctx.strokeStyle = 'rgba(238,138,38,1';
+				}else {
+					ctx.setLineDash([2,2]);
+					ctx.strokeStyle = 'rgba(38,38,38,'+1/(4*linOp)+')';	
+				}
+				
+				if (dir == true) {
+					ctx.moveTo(0, val);
+					ctx.lineTo(thisH, val);
+					ctx.stroke();
+				}else {
+					ctx.moveTo(val,0);
+					ctx.lineTo(val,thisH);
+					ctx.stroke();
+				}
+			}
+			function drawPoint(gridx,gridy){
+				ctx.fillStyle = 'rgba(255,38,38,1)';
+				ctx.beginPath();
+				var x = (thisH/2)+(gridx*xGridLen);
+				var y = (thisH/2)-(gridy*yGridLen);
+				ctx.arc(x, y , 5, 0, 2 * Math.PI);
+				ctx.fill();
+			}
+			function createGrid(x,y){
+				var midPt = {};
+				midPt.x =thisH/2;
+				midPt.y =thisH/2;
+				xGridLen = (thisH/(2*x));
+				yGridLen = (thisH/(2*y));
+				drawPoint(0,0);
+				drawStraightLine(midPt.x,true,0);				//horizontal X-axis
+				drawStraightLine(midPt.y,false,0);			//vertical Y-axis
+				for (var i = 1; i < x; i++) {
+					
+					drawStraightLine(midPt.x+((thisH*i)/(2*x)),true,i);
+					drawStraightLine(midPt.x-((thisH*i)/(2*x)),true,i);
+					drawStraightLine(midPt.y+((thisH*i)/(2*y)),false,i);
+					drawStraightLine(midPt.y-((thisH*i)/(2*y)),false,i);
+				}
+			}
+			createGrid(3,3);
+
+		});
+		</script>
+</body>
+</html>
