@@ -44,6 +44,9 @@
 		}
 		b{
 			font-weight: 700;
+			width: 80px;
+			display: inline-block;
+			text-align: left;
 		}
 	</style>
 </head>
@@ -51,8 +54,8 @@
 	<canvas id="canvas" width="900" height="800"></canvas>
 	<canvas id="canvas2" width="900" height="800"></canvas>
 	<div class="info">
-		<div><b class="timetable"></b> - Times Table</div>
-		<div>Modulus :<b class="mod"></b></div>
+		<div>Times Table for <b class="timetable"></b></div>
+		<div>Modulus :  <b class="mod"></b></div>
 	</div>
 	<script src="../jquery.min.js"></script>
 	<script>
@@ -124,6 +127,7 @@
 			var pointNumber = 0;
 			function createTimeTablePoints(num){
 				pointNumber = num;
+				$('.mod').text(pointNumber);
 				ctx.fillStyle = 'rgba(38,38,138,1)';
 				for (var i = 0; i < num; i++) {
 					var thisPT = {};
@@ -147,18 +151,18 @@
 				ctx.stroke();
 			}
 			function createTimeTable(num){
-				if (num>=201) {
+				if (num>=101) {
 
 				}else{
 					$('.timetable').text((Math.round(num*10))/10);
-					$('.mod').text(pointNumber);
+					
 					setTimeout(function(){
 						ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 						for (var i = 0; i < pointNumber; i++) {
 							pt2pt(i,(Math.round(i*num))%pointNumber);
 						}
 						createTimeTable(num+0.1);
-					}, 400);
+					}, 100);
 				}
 				
 			}
