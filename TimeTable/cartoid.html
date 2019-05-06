@@ -48,6 +48,10 @@
 			display: inline-block;
 			text-align: left;
 		}
+		.canvasCOntainer{
+			position: relative;
+			margin: auto;
+		}
 		@media only screen and (max-width: 610px) {
 			body{
 				background: radial-gradient(#EEE,#FFF);
@@ -56,8 +60,10 @@
 	</style>
 </head>
 <body>
-	<canvas id="canvas" width="900" height="800"></canvas>
-	<canvas id="canvas2" width="900" height="800"></canvas>
+	<div class="canvasCOntainer">
+		<canvas id="canvas" width="900" height="800"></canvas>
+		<canvas id="canvas2" width="900" height="800"></canvas>
+	</div>
 	<div class="info">
 		<div>Times Table for <b id="timetable"></b></div>
 		<div>Modulus :  <b id="mod"></b></div>
@@ -70,6 +76,7 @@
 			var points = [];
 			var height = window.innerHeight;
 			var width = window.innerWidth;
+
 			if (height<=width) {
 				canvas.width = height-40;
 				canvas.height = height-40;
