@@ -17,7 +17,7 @@
 		body{
 			font-weight: 300;
 			text-align: center;
-			background-color: #EEE;
+			background-color: #F5F5F6;
 			display: flex;
 			width: 100vw;
 			height: 100vh;
@@ -124,14 +124,25 @@
 					ctx.stroke();
 				}
 			}
-			function drawPoint(gridx,gridy){
-				ctx.fillStyle = 'rgba(255,38,38,1)';
+			function drawPoint(gridx,gridy, color, rad){
+				if (color) {
+					ctx.fillStyle = color;
+				}else {
+					ctx.fillStyle = 'rgba(255,38,38,1)';
+				}
+				if (rad) {
+					var r = rad;
+				}else {
+					var r = 5;
+				}
 				ctx.beginPath();
 				var x = (thisH/2)+(gridx*xGridLen);
 				var y = (thisH/2)-(gridy*yGridLen);
-				ctx.arc(x, y , 5, 0, 2 * Math.PI);
+				ctx.arc(x, y , r, 0, 2 * Math.PI);
 				ctx.fill();
 			}
+			var gridNumX;
+			var gridNumY;
 			function createGrid(x,y){
 				var midPt = {};
 				midPt.x =thisH/2;
@@ -149,8 +160,50 @@
 					drawStraightLine(midPt.y-((thisH*i)/(2*y)),false,i);
 				}
 			}
-			createGrid(3,3);
+			createGrid(2,2);
+			function checkMod(x, y){
+				var iter = 1;
+				var z = {x:x,y:y};
+				var modZ = Math.pow(Math.abs(Math.pow(z.x,2)-(Math.pow(z.y,2))),0.5);
+				
+				for (var i = 0; i < 10; i++) {
+					var tempx = z.x;
+					var tempy = z.y;
+					z.x = (Math.pow(tempx,2))-(Math.pow(tempy,2));
+					z.y = 2*tempx*tempy;
+					console.log(i,z.x);
+					if (Math.abs(z.x) > 4) {
+						return i;
+					}
+				}
+				return 0;
+			}
+			function checkMandelbrot(gridx, gridy) {
+				setTimeout(function(){
+					var num = checkMod(gridx,gridy);
+					console.log(gridx,gridy,num);
+					if (num == 0) {
+						drawPoint(gridx, gridy, 'rgba(0,0,0,0.5)', 1);
+					}else {
+						drawPoint(gridx, gridy, 'rgba(255,0,0,'+1/num+')', 1);
+					}
+					
+				}, 0);
+				
+			};
+			var pointArray = [];
+			var x = -2;
+			var y = -2;
+			var createGridPoints = function(x,y){
+				for(var x = -2; x <= 2; x = x + 0.01){
+					for(var y = -2; y <= 2; y = y + 0.01){
+						checkMandelbrot(x,y);
+					}
+				}
 
+			}
+			createGridPoints(-2, -2);
+			
 		});
 		</script>
 </body>
