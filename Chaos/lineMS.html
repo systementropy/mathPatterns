@@ -209,7 +209,8 @@
 			var mouse = {x: undefined, y:undefined};
 			var offset = (width - canvas.width)/2;
 			window.addEventListener('mousemove', function(event){
-				
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				createGrid(2,2);
 				mouse.x = ( (  event.x - offset - (thisH/2) ) / xGridLen).toFixed(2);
 				mouse.y = ( ( (thisH/2) - event.y ) / yGridLen).toFixed(2);
 				checkMandelbrot(mouse.x, mouse.y);
