@@ -141,10 +141,10 @@
 				ctx.beginPath();
 				if (linOp == 0) {
 					ctx.setLineDash([]);
-					ctx.strokeStyle = 'rgba(238,138,38,1';
+					ctx.strokeStyle = 'rgba(255,255,255,1';
 				}else {
 					ctx.setLineDash([2,2]);
-					ctx.strokeStyle = 'rgba(38,38,38,'+1/(4*linOp)+')';	
+					ctx.strokeStyle = 'rgba(255,255,255,'+1/(linOp)+')';	
 				}
 				
 				if (dir == true) {
