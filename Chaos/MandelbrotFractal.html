@@ -184,7 +184,7 @@
 			if (i>0) {
 				ctx2.lineWidth = 2;
 				ctx2.setLineDash([1,1]);	
-				ctx2.strokeStyle = 'rgba(255,'+(i*25)+','+255*(dist+i)+',1)';
+				ctx2.strokeStyle = 'rgba('+255*dist+','+(i*10)+','+255*Math.pow((dist+i),0.25)+',1)';
 			}else{
 				ctx2.lineWidth = 1;
 				ctx2.setLineDash([]);
@@ -222,13 +222,13 @@
 				var num = checkMod(gridx,gridy,label);
 				if (label !== 'line') {
 					if(num == 0) {
-						drawPoint(gridx, gridy, 'rgba(0,0,99,1)', 2, false);
+						drawPoint(gridx, gridy, 'rgba(0,0,0,1)', 2, false);
 					}else if (num > 0 && num < 100) {
-						drawPoint(gridx, gridy, 'rgba(0,0,99,0.9)', 2, false);
+						drawPoint(gridx, gridy, 'rgba(0,0,0,0.9)', 2, false);
 					}else if(num <0 && (num>=-5)){
-						drawPoint(gridx, gridy, 'rgba(0,0,0,0.7)', 2, false);
+						drawPoint(gridx, gridy, 'rgba(0,50,50,0.7)', 2, false);
 					}else if(num<-5 && num>=-10){
-						drawPoint(gridx, gridy, 'rgba(75,75,75,0.4)', 2, false);
+						drawPoint(gridx, gridy, 'rgba(150,75,75,0.4)', 2, false);
 					}else if(num<-10 && num>=-25){
 						drawPoint(gridx, gridy, 'rgba(0,255,255,0.3)', 2, false);
 					}else if(num<-25 && num>=-50){
@@ -262,7 +262,7 @@
 			ctx2.clearRect(0,0,canvas2.width,canvas2.height);
 			mouse.x = ( (  event.x - offset - (thisH2/2) ) / xGridLen2).toFixed(4);
 			mouse.y = ( ( (thisH2/2) - event.y ) / yGridLen2).toFixed(4);
-			drawPoint(mouse.x, mouse.y, 'red', 4, true);
+			drawPoint(mouse.x, mouse.y, 'red', 2, true);
 			checkMandelbrot(mouse.x, mouse.y,'line');
 		});
 	</script>
