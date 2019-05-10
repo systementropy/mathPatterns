@@ -88,13 +88,13 @@
 		
 		function pt2pt(pt1,pt2,i){
 			ctx2.beginPath();
-			ctx2.setLineDash([2,1]);	
+			
 			ctx2.moveTo((thisH2/2)+(pt1.x*xGridLen2),(thisH2/2)-(pt1.y*yGridLen2));
 			drawPoint(pt1.x, pt1.y, 'rgba(255,255,255,1)', 1);
 			var dist = Math.pow((parseFloat((Math.pow(pt1.x,2))-(Math.pow(pt2.y,2)))+parseFloat((Math.pow(pt1.y,2))-(Math.pow(pt2.y,2)))),0.25);
 			if (i>0) {
 				ctx2.lineWidth = 2;
-				ctx2.setLineDash([1,1]);	
+				ctx2.setLineDash([]);	
 				ctx2.strokeStyle = 'rgba(255,'+(i*25)+','+255*(dist+i)+',1)';
 			}else{
 				ctx2.lineWidth = 1;
@@ -185,7 +185,7 @@
 		createGrid(2,2);
 		
 		function checkMandelbrot(gridx, gridy) {
-			setTimeout(function(){
+			
 				var num = checkMod(gridx,gridy);
 
 				if (num == 0) {
@@ -204,7 +204,7 @@
 					drawPoint(gridx, gridy, 'rgba(138,138,138,0.9)', 1);
 				}
 				
-			}, 0);
+			
 			
 		};
 		var mouse = {x: undefined, y:undefined};
