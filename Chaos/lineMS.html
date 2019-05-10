@@ -71,163 +71,151 @@
 	</style>
 </head>
 <body>
-	<canvas id="canvas" width="900" height="800"></canvas>
-	<!-- <div class="form">
-		<input type="text" placeholder="input x coordinate" id="inputX">
-		<input type="text" placeholder="input y coordinate" id="inputY">
-		<button class="clicker">GO</button>
-	</div> -->
-	<script src="../jquery.min.js"></script>
+	<canvas id="canvas2" width="900" height="800"></canvas>
+	
 	<script>
+		var canvas2 = document.querySelector("#canvas2");
 		
+		var height2 = window.innerHeight;
+		var width2 = window.innerWidth;
+		canvas2.width = height2-40;
+		canvas2.height = height2-40;
+		thisH2 = height2-40;
+		var ctx2 = canvas2.getContext("2d");
+		ctx2.strokeStyle = 'rgba(0,0,255,0.5)';
+		var xGridLen2;
+		var yGridLen2;
+		
+		function pt2pt(pt1,pt2,i){
+			ctx2.beginPath();
+			ctx2.setLineDash([2,1]);	
+			ctx2.moveTo((thisH2/2)+(pt1.x*xGridLen2),(thisH2/2)-(pt1.y*yGridLen2));
+			drawPoint(pt1.x, pt1.y, 'rgba(255,255,255,1)', 1);
+			var dist = Math.pow((parseFloat((Math.pow(pt1.x,2))-(Math.pow(pt2.y,2)))+parseFloat((Math.pow(pt1.y,2))-(Math.pow(pt2.y,2)))),0.25);
+			if (i>0) {
+				ctx2.lineWidth = 2;
+				ctx2.setLineDash([1,1]);	
+				ctx2.strokeStyle = 'rgba(255,'+(i*25)+','+255*(dist+i)+',1)';
+			}else{
+				ctx2.lineWidth = 1;
+				ctx2.setLineDash([]);
+				ctx2.strokeStyle = 'rgba(255,255,255,0.5)';
+			}
+			ctx2.lineTo((thisH2/2)+(pt2.x*xGridLen2),(thisH2/2)-(pt2.y*yGridLen2));
+			ctx2.stroke();
+		}
+		function checkMod(x, y){
+			var iter = 1;
+			var z = {real:0,imag:0};
+			var c = {real:parseFloat(x),imag:parseFloat(y)};
 
-			//var random = Math.random() * (+max - +min) + +min;
-			var canvas = document.querySelector("canvas");
+			for (var i = 0; i < 100; i++) {
+				var tempx = parseFloat(z.real);
+				var tempy = parseFloat(z.imag);
+				z.real = parseFloat((Math.pow(tempx,2))-(Math.pow(tempy,2)))+c.real;
+				z.imag = parseFloat(2*tempx*tempy)+c.imag;
+				var pt1 = {x: tempx, y: tempy};
+				var pt2 = {x: z.real, y: z.imag};
+				pt2pt(pt1,pt2, i);
+				if ( (Math.pow(tempx,2))-(Math.pow(tempy,2)) >= 4) {
+					return -i;
+				}else if( Math.abs(z.real) < 0.000001 && Math.abs(z.imag) < 0.000001) {
+					return 9999;
+				}
+			}
+			return 0;
+		}
+		function drawStraightLine(val,dir,label){
+			var linOp = Math.abs(((thisH2/2)-val)/(thisH2/6));
+			ctx2.beginPath();
+			if (linOp == 0) {
+				ctx2.setLineDash([]);
+				ctx2.strokeStyle = 'rgba(255,255,255,1';
+			}else {
+				ctx2.setLineDash([2,2]);
+				ctx2.strokeStyle = 'rgba(255,255,255,'+1/(linOp)+')';	
+			}
 			
-			var height = window.innerHeight;
-			var width = window.innerWidth;
-			canvas.width = height-40;
-			canvas.height = height-40;
-			thisH = height-40;
-			var ctx = canvas.getContext("2d");
-			ctx.strokeStyle = 'rgba(0,0,255,0.5)';
-			var xGridLen;
-			var yGridLen;
-			$('.clicker').on('click', function(event) {
-				event.preventDefault();
-				
-				drawPoint(parseFloat($('#inputX').val()),parseFloat($('#inputY').val()));
-				checkMandelbrot(parseFloat($('#inputX').val()),parseFloat($('#inputY').val()));
-			});
-				
-			function pt2pt(pt1,pt2,i){
-				ctx.beginPath();
-				ctx.setLineDash([2,1]);	
-				ctx.moveTo((thisH/2)+(pt1.x*xGridLen),(thisH/2)-(pt1.y*yGridLen));
-				drawPoint(pt1.x, pt1.y, 'rgba(255,255,255,1)', 1);
-				var dist = Math.pow((parseFloat((Math.pow(pt1.x,2))-(Math.pow(pt2.y,2)))+parseFloat((Math.pow(pt1.y,2))-(Math.pow(pt2.y,2)))),0.5);
-				if (i>0) {
-					ctx.strokeStyle = 'rgba('+(255*dist)+','+(i*25)+','+255*(dist+i)+',0.9)';
-				}else{
-					ctx.setLineDash([]);
-					ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-				}
-				ctx.lineTo((thisH/2)+(pt2.x*xGridLen),(thisH/2)-(pt2.y*yGridLen));
-				ctx.stroke();
+			if (dir == true) {
+				ctx2.moveTo(0, val);
+				ctx2.lineTo(thisH2, val);
+				ctx2.stroke();
+			}else {
+				ctx2.moveTo(val,0);
+				ctx2.lineTo(val,thisH2);
+				ctx2.stroke();
 			}
-			function checkMod(x, y){
-				var iter = 1;
-				var z = {real:0,imag:0};
-				var c = {real:parseFloat(x),imag:parseFloat(y)};
+		}
+		function drawPoint(gridx,gridy, color, rad){
+			if (color) {
+				ctx2.fillStyle = color;
+			}else {
+				ctx2.fillStyle = 'rgba(255,38,38,1)';
+			}
+			if (rad) {
+				var r = rad;
+			}else {
+				var r = 5;
+			}
+			ctx2.beginPath();
+			var x = (thisH2/2)+(gridx*xGridLen2);
+			var y = (thisH2/2)-(gridy*yGridLen2);
+			ctx2.arc(x, y , r, 0, 2 * Math.PI);
+			ctx2.fill();
+		}
+		var gridNumX;
+		var gridNumY;
+		function createGrid(x,y){
+			var midPt = {};
+			midPt.x =thisH2/2;
+			midPt.y =thisH2/2;
+			xGridLen2 = (thisH2/(2*x));
+			yGridLen2 = (thisH2/(2*y));
+			drawPoint(0,0);
+			drawStraightLine(midPt.x,true,0);				//horizontal X-axis
+			drawStraightLine(midPt.y,false,0);			//vertical Y-axis
+			for (var i = 1; i < x; i++) {
+				
+				drawStraightLine(midPt.x+((thisH2*i)/(2*x)),true,i);
+				drawStraightLine(midPt.x-((thisH2*i)/(2*x)),true,i);
+				drawStraightLine(midPt.y+((thisH2*i)/(2*y)),false,i);
+				drawStraightLine(midPt.y-((thisH2*i)/(2*y)),false,i);
+			}
+		}
+		createGrid(2,2);
+		
+		function checkMandelbrot(gridx, gridy) {
+			setTimeout(function(){
+				var num = checkMod(gridx,gridy);
 
-				for (var i = 0; i < 100; i++) {
-					var tempx = parseFloat(z.real);
-					var tempy = parseFloat(z.imag);
-					z.real = parseFloat((Math.pow(tempx,2))-(Math.pow(tempy,2)))+c.real;
-					z.imag = parseFloat(2*tempx*tempy)+c.imag;
-					var pt1 = {x: tempx, y: tempy};
-					var pt2 = {x: z.real, y: z.imag};
-					pt2pt(pt1,pt2, i);
-					if ( (Math.pow(tempx,2))-(Math.pow(tempy,2)) >= 4) {
-						return -i;
-					}else if( Math.abs(z.real) < 0.000001 && Math.abs(z.imag) < 0.000001) {
-						return 9999;
-					}
-				}
-				return 0;
-			}
-			function drawStraightLine(val,dir,label){
-				var linOp = Math.abs(((thisH/2)-val)/(thisH/6));
-				ctx.beginPath();
-				if (linOp == 0) {
-					ctx.setLineDash([]);
-					ctx.strokeStyle = 'rgba(255,255,255,1';
-				}else {
-					ctx.setLineDash([2,2]);
-					ctx.strokeStyle = 'rgba(255,255,255,'+1/(linOp)+')';	
+				if (num == 0) {
+					drawPoint(gridx, gridy, 'rgba(0,0,0,0.7)', 1);
+				}else if(num == 9999) {
+					drawPoint(gridx, gridy, 'rgba(0,0,0,1)', 2);
+				}else if(-num<=10){
+					drawPoint(gridx, gridy, 'rgba(255,0,0,'+-(1/num)+')', 2);
+				}else if(-num>10 && -num<=25){
+					drawPoint(gridx, gridy, 'rgba(0,255,255,0.3)', 1);
+				}else if(-num>25 && -num<=50){
+					drawPoint(gridx, gridy, 'rgba(255,255,0,0.5)', 1);
+				}else if(-num>50 && -num<=75){
+					drawPoint(gridx, gridy, 'rgba(255,0,255,0.7)', 1);
+				}else if(-num>70 && -num<=100){
+					drawPoint(gridx, gridy, 'rgba(138,138,138,0.9)', 1);
 				}
 				
-				if (dir == true) {
-					ctx.moveTo(0, val);
-					ctx.lineTo(thisH, val);
-					ctx.stroke();
-				}else {
-					ctx.moveTo(val,0);
-					ctx.lineTo(val,thisH);
-					ctx.stroke();
-				}
-			}
-			function drawPoint(gridx,gridy, color, rad){
-				if (color) {
-					ctx.fillStyle = color;
-				}else {
-					ctx.fillStyle = 'rgba(255,38,38,1)';
-				}
-				if (rad) {
-					var r = rad;
-				}else {
-					var r = 5;
-				}
-				ctx.beginPath();
-				var x = (thisH/2)+(gridx*xGridLen);
-				var y = (thisH/2)-(gridy*yGridLen);
-				ctx.arc(x, y , r, 0, 2 * Math.PI);
-				ctx.fill();
-			}
-			var gridNumX;
-			var gridNumY;
-			function createGrid(x,y){
-				var midPt = {};
-				midPt.x =thisH/2;
-				midPt.y =thisH/2;
-				xGridLen = (thisH/(2*x));
-				yGridLen = (thisH/(2*y));
-				drawPoint(0,0);
-				drawStraightLine(midPt.x,true,0);				//horizontal X-axis
-				drawStraightLine(midPt.y,false,0);			//vertical Y-axis
-				for (var i = 1; i < x; i++) {
-					
-					drawStraightLine(midPt.x+((thisH*i)/(2*x)),true,i);
-					drawStraightLine(midPt.x-((thisH*i)/(2*x)),true,i);
-					drawStraightLine(midPt.y+((thisH*i)/(2*y)),false,i);
-					drawStraightLine(midPt.y-((thisH*i)/(2*y)),false,i);
-				}
-			}
+			}, 0);
+			
+		};
+		var mouse = {x: undefined, y:undefined};
+		var offset = (width2 - canvas2.width)/2;
+		window.addEventListener('mousemove', function(event){
+			ctx2.clearRect(0,0,canvas2.width,canvas2.height);
 			createGrid(2,2);
-			
-			function checkMandelbrot(gridx, gridy) {
-				setTimeout(function(){
-					var num = checkMod(gridx,gridy);
-
-					if (num == 0) {
-						drawPoint(gridx, gridy, 'rgba(0,0,0,0.7)', 1);
-					}else if(num == 9999) {
-						drawPoint(gridx, gridy, 'rgba(0,0,0,1)', 2);
-					}else if(-num<=10){
-						drawPoint(gridx, gridy, 'rgba(255,0,0,'+-(1/num)+')', 2);
-					}else if(-num>10 && -num<=25){
-						drawPoint(gridx, gridy, 'rgba(0,255,255,0.3)', 1);
-					}else if(-num>25 && -num<=50){
-						drawPoint(gridx, gridy, 'rgba(255,255,0,0.5)', 1);
-					}else if(-num>50 && -num<=75){
-						drawPoint(gridx, gridy, 'rgba(255,0,255,0.7)', 1);
-					}else if(-num>70 && -num<=100){
-						drawPoint(gridx, gridy, 'rgba(138,138,138,0.9)', 1);
-					}
-					
-				}, 0);
-				
-			};
-			var mouse = {x: undefined, y:undefined};
-			var offset = (width - canvas.width)/2;
-			window.addEventListener('mousemove', function(event){
-				ctx.clearRect(0,0,canvas.width,canvas.height);
-				createGrid(2,2);
-				mouse.x = ( (  event.x - offset - (thisH/2) ) / xGridLen).toFixed(2);
-				mouse.y = ( ( (thisH/2) - event.y ) / yGridLen).toFixed(2);
-				checkMandelbrot(mouse.x, mouse.y);
-			});
-
-		</script>
+			mouse.x = ( (  event.x - offset - (thisH2/2) ) / xGridLen2).toFixed(2);
+			mouse.y = ( ( (thisH2/2) - event.y ) / yGridLen2).toFixed(2);
+			checkMandelbrot(mouse.x, mouse.y);
+		});
+	</script>
 </body>
 </html>

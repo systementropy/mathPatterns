@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Roboto',sans-serif;
+			font-weight: inherit;
+			text-align: inherit;
+			background: transparent;
+			cursor: default;
+		}
+		body{
+			font-weight: 300;
+			text-align: center;
+			background-color: #F5F5F6;
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+		a{
+			cursor: pointer;
+		}
+		canvas{
+			border: 1px solid #00FF00;
+			margin: auto;
+		}
+		body>div{
+			position: relative;
+			margin: auto;
+		}
+		#canvas2{
+			position: absolute;
+			left: 50%;
+			top:50%;
+			transform: translate(-50%,-50%);
+			z-index: 1;
+		}
+	</style>
+</head>
+<body>
+	<div class="">
+		<canvas id="canvas" width="900" height="800"></canvas>
+		<canvas id="canvas2" width="900" height="800"></canvas>
+	</div>
+	
+	<script>
+		var canvas = document.querySelector("#canvas");
+		var height = window.innerHeight;
+		var width = window.innerWidth;
+		canvas.width = height-40;
+		canvas.height = height-40;
+		thisH = height-40;
+		var ctx = canvas.getContext("2d");
+		ctx.strokeStyle = 'rgba(0,0,255,0.5)';
+		var xGridLen;
+		var yGridLen;
+
+
+
+		var canvas2 = document.querySelector("#canvas2");
+		var height2 = window.innerHeight;
+		var width2 = window.innerWidth;
+		canvas2.width = height2-40;
+		canvas2.height = height2-40;
+		thisH2 = height2-40;
+		var ctx2 = canvas2.getContext("2d");
+		ctx2.strokeStyle = 'rgba(0,0,255,0.5)';
+		var xGridLen2;
+		var yGridLen2;
+		var mouse = {x: undefined, y:undefined};
+		var offset = (width2 - canvas2.width)/2;
+
+
+		function drawDottedLine(val,dir){
+
+		}
+		function drawStraightLine(val,dir,label){
+			var linOp = Math.abs(((thisH/2)-val)/(thisH/6));
+			ctx.beginPath();
+			if (linOp == 0) {
+				ctx.setLineDash([]);
+				ctx.strokeStyle = 'rgba(255,255,255,1';
+			}else {
+				ctx.setLineDash([2,2]);
+				ctx.strokeStyle = 'rgba(255,255,255,'+1/linOp+')';	
+			}
+			
+			if (dir == true) {
+				ctx.moveTo(0, val);
+				ctx.lineTo(thisH, val);
+				ctx.stroke();
+			}else {
+				ctx.moveTo(val,0);
+				ctx.lineTo(val,thisH);
+				ctx.stroke();
+			}
+		}
+		function drawPoint(gridx, gridy, color, rad, varctx){
+			if (varctx == true) {
+				if (color) {
+					ctx2.fillStyle = color;
+				}else {
+					ctx2.fillStyle = 'rgba(255,38,38,1)';
+				}
+				if (rad) {
+					var r = (rad/2);
+					ctx2.beginPath();
+					var x = (thisH/2)+(gridx*xGridLen);
+					var y = (thisH/2)-(gridy*yGridLen);
+					ctx2.rect(x-r, y-r, 2*r, 2*r);
+					ctx2.fill();
+				}else {
+					var r = 5;
+					ctx2.beginPath();
+					var x = (thisH/2)+(gridx*xGridLen);
+					var y = (thisH/2)-(gridy*yGridLen);
+					ctx2.arc(x, y , r, 0, 2 * Math.PI);
+					ctx2.fill();
+				}
+			}else{
+				if (color) {
+					ctx.fillStyle = color;
+				}else {
+					ctx.fillStyle = 'rgba(255,38,38,1)';
+				}
+				if (rad) {
+					var r = (rad/2);
+					ctx.beginPath();
+					var x = (thisH/2)+(gridx*xGridLen);
+					var y = (thisH/2)-(gridy*yGridLen);
+					ctx.rect(x-r, y-r, 2*r, 2*r);
+					ctx.fill();
+				}else {
+					var r = 5;
+					ctx.beginPath();
+					var x = (thisH/2)+(gridx*xGridLen);
+					var y = (thisH/2)-(gridy*yGridLen);
+					ctx.arc(x, y , r, 0, 2 * Math.PI);
+					ctx.fill();
+				}
+			}
+			
+			
+		}
+		var gridNumX;
+		var gridNumY;
+		function createGrid(x,y){
+			var midPt = {};
+			midPt.x =thisH/2;
+			midPt.y =thisH/2;
+			xGridLen = (thisH/(2*x));
+			yGridLen = (thisH/(2*y));
+			xGridLen2 = (thisH2/(2*x));
+			yGridLen2 = (thisH2/(2*y));
+			drawPoint(0,0,false);
+			drawStraightLine(midPt.x,true,0);				//horizontal X-axis
+			drawStraightLine(midPt.y,false,0);			//vertical Y-axis
+			for (var i = 1; i < x; i++) {
+				
+				drawStraightLine(midPt.x+((thisH*i)/(2*x)),true,i);
+				drawStraightLine(midPt.x-((thisH*i)/(2*x)),true,i);
+				drawStraightLine(midPt.y+((thisH*i)/(2*y)),false,i);
+				drawStraightLine(midPt.y-((thisH*i)/(2*y)),false,i);
+			}
+		}
+		createGrid(2,2);
+
+		function pt2pt(pt1,pt2,i){
+			//console.log(pt2)
+			ctx2.beginPath();
+			ctx2.setLineDash([2,1]);	
+			ctx2.moveTo((thisH2/2)+(pt1.x*xGridLen2),(thisH2/2)-(pt1.y*yGridLen2));
+			drawPoint(pt1.x, pt1.y, 'rgba(255,255,255,1)', 1,true);
+			var dist = Math.pow((parseFloat((Math.pow(pt1.x,2))-(Math.pow(pt2.y,2)))+parseFloat((Math.pow(pt1.y,2))-(Math.pow(pt2.y,2)))),0.25);
+			if (i>0) {
+				ctx2.lineWidth = 2;
+				ctx2.setLineDash([1,1]);	
+				ctx2.strokeStyle = 'rgba(255,'+(i*25)+','+255*(dist+i)+',1)';
+			}else{
+				ctx2.lineWidth = 1;
+				ctx2.setLineDash([]);
+				ctx2.strokeStyle = 'rgba(255,255,255,0.5)';
+			}
+			ctx2.lineTo((thisH2/2)+(pt2.x*xGridLen2),(thisH2/2)-(pt2.y*yGridLen2));
+			ctx2.stroke();
+		}
+		function checkMod(x, y, label){
+			var iter = 1;
+			var z = {real:0,imag:0};
+			var c = {real:parseFloat(x),imag:parseFloat(y)};
+			var modZ = Math.pow(Math.abs(Math.pow(z.real,2)-(Math.pow(z.imag,2))),0.5);
+			for (var i = 0; i < 100; i++) {
+				var tempx = parseFloat(z.real);
+				var tempy = parseFloat(z.imag);
+				z.real = parseFloat((Math.pow(tempx,2))-(Math.pow(tempy,2)))+c.real;
+				z.imag = parseFloat(2*tempx*tempy)+c.imag;
+				var pt1 = {x: tempx, y: tempy};
+				var pt2 = {x: z.real, y: z.imag};
+				if (label=='line') {
+					pt2pt(pt1,pt2, i);
+				}
+				
+				if ( (Math.pow(tempx,2))-(Math.pow(tempy,2)) >= 4) {
+					return -i;
+				}else if( Math.abs(z.real) < 0.1 && Math.abs(z.imag) < 0.1) {
+					return i;
+				}
+			}
+			return 0;
+		}
+		var count = {pos:0,zero:0,neg:0};
+		function checkMandelbrot(gridx, gridy,label) {
+				var num = checkMod(gridx,gridy,label);
+				if (label !== 'line') {
+					if(num == 0) {
+						drawPoint(gridx, gridy, 'rgba(0,0,99,1)', 2, false);
+					}else if (num > 0 && num < 100) {
+						drawPoint(gridx, gridy, 'rgba(0,0,99,0.9)', 2, false);
+					}else if(num <0 && (num>=-5)){
+						drawPoint(gridx, gridy, 'rgba(0,0,0,0.7)', 2, false);
+					}else if(num<-5 && num>=-10){
+						drawPoint(gridx, gridy, 'rgba(75,75,75,0.4)', 2, false);
+					}else if(num<-10 && num>=-25){
+						drawPoint(gridx, gridy, 'rgba(0,255,255,0.3)', 2, false);
+					}else if(num<-25 && num>=-50){
+						drawPoint(gridx, gridy, 'rgba(255,255,0,0.5)', 2, false);
+					}else if(num<-50 && num>=-75){
+						drawPoint(gridx, gridy, 'rgba(255,0,255,0.7)', 2, false);
+					}else if(num<-70 && num>=-100){
+						drawPoint(gridx, gridy, 'rgba(9,255,9,0.9)', 2, false);
+					}
+				}
+				
+				
+			
+		};
+		var pointArray = [];
+		var x = -2;
+		var y = -2;
+
+		var createGridPoints = function(x,y){
+			for(var x = -2; x <= 2; x = x + 0.005){
+				for(var y = -2; y <= 2; y = y + 0.005){
+					checkMandelbrot(x,y);
+				}
+			}
+
+		}
+		createGridPoints(-2, -2);
+		createGrid(2,2);
+
+		window.addEventListener('mousemove', function(event){
+			ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+			mouse.x = ( (  event.x - offset - (thisH2/2) ) / xGridLen2).toFixed(4);
+			mouse.y = ( ( (thisH2/2) - event.y ) / yGridLen2).toFixed(4);
+			drawPoint(mouse.x, mouse.y, 'red', 4, true);
+			checkMandelbrot(mouse.x, mouse.y,'line');
+		});
+	</script>
+</body>
+</html>
