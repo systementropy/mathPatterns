@@ -17,7 +17,7 @@
 		body{
 			font-weight: 300;
 			text-align: center;
-			background-color: #F5F5F6;
+			background-color: #000;
 			display: flex;
 			width: 100vw;
 			height: 100vh;
@@ -102,12 +102,12 @@
 				
 			function pt2pt(pt1,pt2,i){
 				ctx.beginPath();
-				ctx.setLineDash([1,1]);	
+				ctx.setLineDash([2,1]);	
 				ctx.moveTo((thisH/2)+(pt1.x*xGridLen),(thisH/2)-(pt1.y*yGridLen));
-				drawPoint(pt1.x, pt1.y, 'rgba(0,0,0,1)', 1);
+				drawPoint(pt1.x, pt1.y, 'rgba(255,255,255,1)', 1);
 				var dist = Math.pow((parseFloat((Math.pow(pt1.x,2))-(Math.pow(pt2.y,2)))+parseFloat((Math.pow(pt1.y,2))-(Math.pow(pt2.y,2)))),0.5);
 				if (i>-1) {
-					ctx.strokeStyle = 'rgba('+(255*dist)+','+(i/dist)+','+255*(dist+i)+',0.5)';
+					ctx.strokeStyle = 'rgba('+(255*dist)+','+(i*25)+','+255*(dist+i)+',0.9)';
 				}
 				ctx.lineTo((thisH/2)+(pt2.x*xGridLen),(thisH/2)-(pt2.y*yGridLen));
 				ctx.stroke();
@@ -127,7 +127,7 @@
 					pt2pt(pt1,pt2, i);
 					if ( (Math.pow(tempx,2))-(Math.pow(tempy,2)) >= 4) {
 						return -i;
-					}else if( Math.abs(z.real) < 0.00001 && Math.abs(z.imag) < 0.00001) {
+					}else if( Math.abs(z.real) < 0.000001 && Math.abs(z.imag) < 0.000001) {
 						return 9999;
 					}
 				}
